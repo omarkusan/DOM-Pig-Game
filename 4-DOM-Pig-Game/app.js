@@ -9,6 +9,8 @@ GAME RULES:
 
 */
 var scores,roundScore,activePlayer,gamePlaying; 
+var previousValue=[0,0];
+var currentValue=[];
 
 init();
 
@@ -26,24 +28,44 @@ init();
 
 document.querySelector('.btn-roll').addEventListener('click',function(){
     if(gamePlaying){
-    var dice = Math.floor(Math.random() * 6)+1;
+    var dice1 = Math.floor(Math.random() * 6)+1;
+    var dice2 = Math.floor(Math.random() * 6)+1;
     
-    var diceDOM = document.querySelector('.dice');
-    diceDOM.style.display = 'block';
-    diceDOM.src = 'dice-'+dice+'.png';
+//    var diceDOM = document.querySelector('.dice');
+    document.getElementById('dice-1').style.display = 'block';
+    document.getElementById('dice-1').style.display = 'block';
+    document.getElementById('dice-1').src = 'dice-' + dice1 + '.png';
+    document.getElementById('dice-2').src = 'dice-' + dice2 + '.png';
     
-    if(dice !== 1){
-        //Add score
-        roundScore+=dice;
-        console.log(dice);
-        document.getElementById('current-'+activePlayer).textContent = roundScore;
-//      document.querySelector('#current-'+activePlayer).textContent = roundScore;
-   
-    }else{
-        //Next player
+        if(dice1 !==1 && dice2 !==1){
+            roundScore += dice1 + dice2;
+            document.querySelector('#current-'+ activePlayer).textContent = roundScore;
+        }else{
+            nextPlayer();
+        }
+        
+    /*    
+    currentValue[activePlayer]= dice;
+    if((previousValue[activePlayer]===6)&&(currentValue[activePlayer]===6)){
+        scores[activePlayer] = 0;
+        document.querySelector('#score-'+activePlayer).textContent = '0';
         nextPlayer();
     }
+    else if(dice !== 1){
+
+        roundScore+=dice;
+        console.log('previous value:'+previousValue[activePlayer]);
+        console.log('curent value:'+currentValue[activePlayer]);
+        document.getElementById('current-'+activePlayer).textContent = roundScore;
+        previousValue[activePlayer]=dice;
+   
+    }else{
+        console.log('dice:'+dice);
+        //Next player
+        nextPlayer();
+    }*/
     }
+    
    
     
 });
@@ -57,11 +79,22 @@ document.querySelector('.btn-hold').addEventListener('click',function(){
     
     //Updata the UI 
     document.querySelector('#score-'+activePlayer).textContent = scores[activePlayer];
-   
+    var input = document.getElementById('winningScore').value;
+     var winningScore;
+       //Undefined, 0, null or "" are COERCED to false
+       //Any else is COERCED to true
+       if(input){
+            winningScore = input;
+       }else{
+            winningScore = 100;
+       }
+       
+       
     //check if player won the game
-    if(scores[activePlayer]>=20){
+    if(scores[activePlayer]>=winningScore){
         document.querySelector('#name-'+activePlayer).textContent = 'Winner!';
-        document.querySelector('.dice').style.display = 'none';
+        document.getElementById('dice-1').style.display = 'none';
+        document.getElementById('dice-1').style.display = 'none';
         document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
         document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
         gamePlaying = false;
@@ -83,7 +116,8 @@ function nextPlayer(){
         
 //        document.querySelector('.player-0-panel').classList.remove('active');
 //        document.querySelector('.player-1-panel').classList.add('active');
-        document.querySelector('.dice').style.display = 'none';
+        document.getElementById('dice-1').style.display = 'none';
+        document.getElementById('dice-1').style.display = 'none';
 }
 
 document.querySelector('.btn-new').addEventListener('click',init);
@@ -92,7 +126,8 @@ function init(){
     scores = [0,0];
     activePlayer = 0;
     roundScore = 0;
-    document.querySelector('.dice').style.display = 'none';
+    document.getElementById('dice-1').style.display = 'none';
+    document.getElementById('dice-1').style.display = 'none';
     document.getElementById('score-0').textContent = '0';
     document.getElementById('score-1').textContent = '0';
     document.getElementById('current-0').textContent = '0';
